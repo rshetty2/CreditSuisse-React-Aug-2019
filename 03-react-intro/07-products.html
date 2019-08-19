@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Products</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script type="text/babel">
+		class Products extends React.Component{
+			state = {
+				productNames : [],
+				newProductName : ''
+			};
+
+			onAddNewClick = () => {
+				let { productNames, newProductName } = this.state;
+				let newProductNames = [...productNames, newProductName];
+				this.setState({ productNames : newProductNames});
+				this.props.onProductsChange(newProductNames.length);
+			}
+
+			render(){
+				let productItems = this.state.productNames.map((productName, index) => (<li key={index}>{productName}</li>));
+				return(
+					<section>
+						<h1>Products</h1>
+						<hr/>
+						<label>Product Name :</label>
+						<input type="text" onChange={evt => this.setState({ newProductName : evt.target.value})} />
+						<input type="button" value="Add New" onClick={this.onAddNewClick}/>
+						<ol>
+							{productItems}
+						</ol>
+					</section>
+				)
+			}
+		}
+
+		let ProductsCount = ({data}) => (<div> Products Count : {data}</div>);
+
+		class App extends React.Component{
+			state = { data : 0 };
+			render(){
+				return (
+					<div>
+						<Products onProductsChange={ count => this.setState({data : count}) }/>
+						<hr/>
+						<ProductsCount data={this.state.data}/>
+					</div>
+				)
+			}
+		}
+
+		ReactDOM.render(
+			<App/>
+			,
+			document.getElementById('root'));
+	</script>
+</head>
+<body>
+	<div id="root">
+		
+	</div>
+</body>
+</html>
